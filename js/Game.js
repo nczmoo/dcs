@@ -59,6 +59,38 @@ class Game{
 		}
 	}
 
+	fetchPositions(reelID){
+		let pos = this.config.positions[reelID], prev = pos - 1, next = pos + 1;
+		if (prev < 0){
+			prev = this.config.numOfSymbolsOnReel - 1;
+		}
+		if (next == this.config.numOfSymbolsOnReel){
+			next = 0;
+		}
+		return {prev: prev, pos: pos, next: next};
+	}
+
+	fetchWins(){
+		let reels = [];
+		for (let reelID in this.config.reels){
+			let positions = this.fetchPositions(reelID);
+			reels.push(positions);
+		}
+		let wins = [];
+		for (let winID in this.config.wins){
+			let win = this.config.wins[winID];
+			if (this.config.reels[0][reels[0][win[0]]] 
+				== this.config.reels[1][reels[1][win[1]]] 
+				&& this.config.reels[0][reels[0][win[0]]] 
+				== this.config.reels[2][reels[2][win[2]]]){
+				wins.push(winID);
+			}
+			
+		}
+		this.processWins(wins);		
+		ui.animateWins(wins);
+	}
+
 	fight(){
 		this.config.yourTurn = !this.config.yourTurn;
 		if (this.config.yourTurn){
@@ -66,6 +98,16 @@ class Game{
 			return;
 		}
 		this.mobHits();
+	}
+
+	insert(delta){
+		delta = Number(delta);
+		if (this.config.gold < delta){
+			return;
+		}
+
+		this.config.gold -= delta;
+		this.config.credits += delta;
 	}
 
 	looping(){
@@ -80,7 +122,7 @@ class Game{
 		ui.status("The lvl " + this.config.mob.level + " " 
 			+ this.config.mob.name + " died and you looted " + loot 
 			+ " gold from it. (<span class='text-success='>+" + loot 
-			+ " gold</span>)");		
+			+ " 	gold</span>)");		
 		this.config.getGold(loot);
 		this.config.mob = null;		
 		if (this.config.forward){			
@@ -125,6 +167,39 @@ class Game{
 		}
 	}
 
+	processWins(wins){
+		if(wins.length < 1){
+			return;
+		}
+		let what = this.config.reels[1][this.config.positions[1]];
+		if (what == 'heal' || what == 'portal'){
+			this.config.potions[what] += wins.length;
+			return;
+		}
+		console.log(this.config[what]);
+		this.config[what] += wins.length;
+		console.log(this.config[what]);
+	}
+
+	pull(){
+		if (this.config.credits < 1){
+			return;
+		}
+		this.config.credits --;
+		for (let i in this.config.positions){
+			let rand = null;
+			while (1){
+				rand = randNum(0, this.config.numOfSymbolsOnReel - 1);
+				if (rand != this.config.positions[i], rand){
+					break;
+				}
+			}
+			this.config.positions[i] = rand;
+		}
+		this.fetchWins();
+		ui.printReels();
+	}
+
 	spawn(){
 		console.log('spawn');
 		if (this.config.mob != null){
@@ -153,4 +228,6 @@ class Game{
 		}
 		this.config.modifiers.health++;
 	}
+
+
 }

@@ -8,23 +8,40 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<title>Dungeon Crawler Slots</title>
 	<style>
-	
+		.reel{
+			background-color:gainsboro;
+			border: 1px white solid;
+		}
+		.straight{
+			background-color:silver;
+		}
+		.win{
+			font-weight: bold;
+			background-color: gold;
+		}
 	</style>
 </head>
 <body>
-
-	<div id="dungeon" class="window">
-		<div class="row">
-			<div class="col text-center">
-				Health: <span id='health'></span>/<span id='maxHealth'></span>
-			</div><div class="col text-center">
-				Armor: <span id="armor"></span>
-			</div><div class="col text-center">
-				Weapon: <span id="weapon"></span>
-			</div><div class="col text-center">
-				Gold: <span id="gold"></span>
-			</div>
+	<div class="row">
+		<div class="col text-center">
+			Health: <span id='health'></span>/<span id='maxHealth'></span>
+		</div><div class="col text-center">
+			Armor: <span id="armor"></span>
+		</div><div class="col text-center">
+			Weapon: <span id="weapon"></span>
+		</div><div class="col text-center">
+			Gold: <span id="gold"></span>
 		</div>
+	</div>
+	<div id="menu" class="row mb-3 mt-3">
+		<div class="col text-center">
+			<button id='menu-dungeon' class="menu btn btn-link">dungeon</button> 
+		</div><div class="col text-center">
+			<button id='menu-store' class="menu btn btn-link" disabled>store</button> 
+		</div>
+	</div>
+	<div id="dungeon" class="window d-none">
+		
 		<div class="text-center">
 			<button id='crawl' class="btn btn-success form-control">enter</button>
 		</div><div class="row">
@@ -34,6 +51,29 @@
 				Fighting: <span id="fighting"></span>
 			</div>
 		</div><div id="log" class="text-center"></div>
+	</div><div id="store" class="window">
+		<div class="row">
+			<div id='reel-0' class='col text-center'>
+
+			</div><div id='reel-1' class='col  text-center'>
+
+			</div><div id='reel-2' class='col text-center'>
+
+			</div>
+
+		</div>
+		<div class="text-center mt-3 mb-3">
+			Credits: <span id="credits"></span>
+		</div>
+		<div class="row">
+			<div class="col text-center">
+				<button id="insert-1" class="insert btn btn-warning btn-lg form-control verb2">insert 1 gold</button>
+			</div><div class="col text-center">
+				<button id="insert-5" class="insert btn btn-warning btn-lg form-control verb2">insert 5 gold</button>
+			</div>
+		</div><div class="mt-3">
+			<button id="pull" class="btn btn-success btn-lg form-control verb">pull</button>
+		</div>
 	</div>
 
 
