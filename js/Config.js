@@ -3,7 +3,7 @@ class Config {
     crawling = false;
     credits = 0;
     forward = true;
-    gold = 100;
+    gold = 0;
     goldInRun = 0;
 	health = 10;    
     maxHealth = 10;

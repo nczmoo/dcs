@@ -11,7 +11,7 @@ class Game{
 		}
 		this.config.steps--;
 		if (this.config.steps < 1){
-			this.config.crawling = false;
+			this.exit();
 		}
 		
 	}
@@ -29,7 +29,7 @@ class Game{
 		if (!this.config.forward){
 			modifier = 2;
 		}
-		if (randNum(1, this.config.spawnRate * 2) == 1){
+		if (randNum(1, this.config.spawnRate * modifier) == 1){
 			this.spawn();			
 		}
 
@@ -38,10 +38,7 @@ class Game{
 	die(){
 		ui.status("You died " + this.config.steps + " steps in, lost all your gold, and someone brought you back to the entrance.");
 		this.config.resetGold();
-		this.config.crawling = false;
-		this.config.steps = 0;
-		this.config.resetHealth();
-		this.config.mob = null;
+		this.exit();
 	}
 
 	downgradeMob(){
@@ -49,13 +46,34 @@ class Game{
 		if (this.config.modifiers.level < 1){
 			return;
 		}
-		this.config.mob.modifiers.level--;
+		this.config.modifiers.level--;
 		if (rand == 1 && this.config.modifiers.attack > 1){
 			this.config.modifiers.attack--;			
 			return;
 		}
 		if (this.config.modifiers.health > 0){
 			this.config.modifiers.health--;
+		}
+	}
+
+	drink(potion){
+		if (potion == 'heal'){
+			this.config.resetHealth();
+			ui.status("You heal yourself back to full!")
+		} else if (potion == 'portal'){
+			this.exit();
+			ui.status('You open a portal and exit the dungeon.');
+		}
+	}
+
+	exit(){
+		this.config.crawling = false;
+		this.config.forward = true;
+		this.config.steps = 0;
+		this.config.resetHealth();
+		this.config.mob = null;
+		for (let i in this.config.modifiers){
+			this.config.modifiers[i] = 0;
 		}
 	}
 

@@ -11,6 +11,12 @@ class UI{
 		for (let fill of fills){			
 			$("#" + fill).html(game.config[fill]);
 		}
+		for (let i in game.config.potions){
+			let potion = game.config.potions[i];
+			
+			$("#" + i).html(potion);
+			$("#drink-" + i).prop('disabled', potion < 1);		
+		}
 		if (!game.config.crawling){
 			$("#crawl").html('enter');
 			$("#crawl").addClass('btn-success');

@@ -3,14 +3,24 @@ SUMMARY
         You crawl a dungeon to get gold but you have to use a slot machine to get better equipment to go deeper.
 
 TODO
-    Dungeon
+    x Dungeon
+
         Start crawling
+
         Mobs spawn as you go forward and you fight them.
+
         Mobs get progressively more difficult.
+
         You can retreat back to the entrance, fighting progressively easier monsters on your way out.
+
         When you get back to the entrance, you leave the dungeon.
+
         Health replenishes when exiting dungeon.
-    Slots
+
+    x Slots
+    
+    Potions
+
 
 QUESTIONS
     What can you get from the slots?
