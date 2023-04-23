@@ -18,8 +18,9 @@ TODO
         Health replenishes when exiting dungeon.
 
     x Slots
-    
-    Potions
+
+    x Potions
+    create 40 x 40 icons for slot symbols on reels
 
 
 QUESTIONS
@@ -46,4 +47,6 @@ DESIGN
         Mobs drop random gold (0, power)
 MAYBE
     make armor degrade so it has to be repaired
+    repair armor as part of a slot
+    bank
     

@@ -26,7 +26,7 @@ $(document).on('click', '.verb', function(e){
 	game[e.target.id]();
 })
 
-$(document).on('click', '.verb2', function(e){
+$(document).on('click', '.verb1', function(e){
 	game[e.target.id.split('-')[0]](e.target.id.split('-')[1]);
 })
 

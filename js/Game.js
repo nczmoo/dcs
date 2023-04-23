@@ -2,7 +2,7 @@ class Game{
 	config = new Config();	
 	loopInterval = setInterval(this.looping, 500);
 	constructor(){
-
+		
 	}
 
 	back(){
@@ -128,6 +128,19 @@ class Game{
 		this.config.credits += delta;
 	}
 
+	lines(delta){
+		console.log('lines', delta);
+		if ((delta == 'more' && (this.config.gold == 0 || this.config.lines == this.config.gold)) 
+		|| (delta == 'less' && this.config.lines == 1)){
+			return;
+		}
+		if (delta == 'more'){
+			this.config.lines ++;
+			return;
+		}
+		this.config.lines --;
+	}
+
 	looping(){
 		if (game.config.crawling){
 			game.crawl();
@@ -186,24 +199,32 @@ class Game{
 	}
 
 	processWins(wins){
+		this.config.checkLines();
 		if(wins.length < 1){
 			return;
 		}
 		let what = this.config.reels[1][this.config.positions[1]];
-		if (what == 'heal' || what == 'portal'){
-			this.config.potions[what] += wins.length;
-			return;
+		let pay = wins.length;
+		if (pay > this.config.lines){
+			pay = this.config.lines;
 		}
-		console.log(this.config[what]);
-		this.config[what] += wins.length;
-		console.log(this.config[what]);
+		if (what == 'heal' || what == 'portal'){
+			this.config.potions[what] += pay;
+			return;
+		}		
+
+		this.config[what] += pay;
+		this.config.resetHealth();
+		this.config.resetArmor();
+		
 	}
 
 	pull(){
-		if (this.config.credits < 1){
+		this.config.checkLines();
+		if (this.config.gold < 1){
 			return;
 		}
-		this.config.credits --;
+		this.config.gold -= this.config.lines;
 		for (let i in this.config.positions){
 			let rand = null;
 			while (1){
@@ -218,21 +239,18 @@ class Game{
 		ui.printReels();
 	}
 
-	spawn(){
-		console.log('spawn');
+	spawn(){		
 		if (this.config.mob != null){
 			return;
 		}
 		let name = 'rat';
 		let mob = { ...this.config.mobs[name]};
-		console.log(mob);
 		this.config.mob = mob;
 		for (let i in this.config.modifiers){
 			let modifier = this.config.modifiers[i];
 			this.config.mob[i] += modifier;
 		}
 		this.config.mob.name = name;
-		console.log(this.config.mob);
 		ui.status("<span class='fw-bold'>A lvl " + this.config.mob.level + " " + this.config.mob.name + " spawned</span> in front of you.")
 	}
 

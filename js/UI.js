@@ -4,10 +4,10 @@ class UI{
 	wins = null;
 	winPointer = null;	
 	constructor(){
-
+		this.printReels();
 	}
 	refresh(){
-		let fills = ['armor', 'credits', 'gold', 'health', 'maxHealth', 'steps', 'weapon'];
+		let fills = ['armor', 'credits', 'gold', 'health', 'lines', 'maxHealth', 'steps', 'weapon'];
 		for (let fill of fills){			
 			$("#" + fill).html(game.config[fill]);
 		}
@@ -29,7 +29,7 @@ class UI{
 			$("#crawl").html('exiting');
 		}
 		$("#pull").prop('disabled', false);
-		if (game.config.credits < 1){
+		if (game.config.gold < 1 || this.wins != null){
 			$("#pull").prop('disabled', true);
 		}
 		this.refreshFighting();
@@ -39,7 +39,6 @@ class UI{
 
 	animating(){
 		if (ui.wins != null){
-			console.log('animatingWin');
 			ui.animatingWins();
 		}
 	}
@@ -48,11 +47,10 @@ class UI{
 		let win = game.config.wins[this.wins[this.winPointer]];
 		$(".reel").removeClass('win');
 		for (let reelID in win){
-			console.log("#reel-" + reelID + "-" + win[reelID]);
 			$("#reel-" + reelID + "-" + win[reelID]).addClass('win');
 		}
 		this.winPointer++;
-		if (this.winPointer > this.wins.length - 1){
+		if (this.winPointer > this.wins.length - 1 || this.winPointer > game.config.lines - 1){
 			this.winPointer = null;
 			this.wins = null;
 			$("#pull").prop('disabled', false);
@@ -63,7 +61,6 @@ class UI{
 		if(wins.length < 1){
 			return;
 		}
-		console.log('win');
 		$("#pull").prop('disabled', true);
 		this.wins = wins;
 		this.winPointer = 0;

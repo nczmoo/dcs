@@ -1,11 +1,14 @@
 class Config {
     armor = 0;
+    maxArmor = 0;
     crawling = false;
     credits = 0;
     forward = true;
     gold = 0;
     goldInRun = 0;
-	health = 10;    
+	health = 10;   
+    lines = 1; 
+    maxLines = 5;
     maxHealth = 10;
     mob = null;
     mobs = {
@@ -23,9 +26,9 @@ class Config {
         portal: 0,
     }
     positions = [];
-    reelSymbols = ['heal', 'weapon', 'armor', 'health', 'portal'];
+    reelSymbols = ['heal', 'weapon', 'maxArmor', 'maxHealth', 'portal'];
     reels = [];
-    spawnRate = 3;
+    spawnRate = 5;
     steps = 0;    
     weapon = 1;
     wins = [
@@ -44,6 +47,22 @@ class Config {
         }
     }
 
+    checkLines(){
+        if (this.lines < 1){
+            this.lines = 1;
+        }
+        if (this.lines < 2){
+            return;
+        }
+        if (this.lines > this.maxLines){
+            this.lines = this.maxLines;
+        }
+
+        if (this.lines > this.gold){
+            this.lines = this.gold;
+        }
+    }
+
     generateReel(){
         let reel = [];                
         while (reel.length < this.numOfSymbolsOnReel){
@@ -59,10 +78,16 @@ class Config {
     getGold(delta){
         this.gold += delta;
         this.goldInRun += delta;
+        this.checkLines();
+    }
+
+    resetArmor(){
+        this.armor = this.maxArmor;
     }
 
     resetGold(){
         this.gold = 0;
+        this.checkLines();
     }
 
     resetHealth(){
