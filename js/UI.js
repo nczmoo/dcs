@@ -1,13 +1,17 @@
 class UI{
 	logs = [];
 	animatingInterval = setInterval(this.animating, 1000);
+	potionsHidden = true;
 	wins = null;
 	winPointer = null;	
 	constructor(){
 		this.printReels();
 	}
 	refresh(){
-		let fills = ['armor', 'credits', 'gold', 'health', 'lines', 'maxHealth', 'steps', 'weapon'];
+		if (!this.potionsHidden){
+			$("#potions").removeClass('d-none');
+		}
+		let fills = ['armor', 'credits', 'gold', 'health', 'lines', 'maxArmor', 'maxHealth', 'steps', 'weapon'];
 		for (let fill of fills){			
 			$("#" + fill).html(game.config[fill]);
 		}
@@ -34,7 +38,8 @@ class UI{
 		}
 		this.refreshFighting();
 		this.printLog();
-		
+		let width = (game.config.health / game.config.maxHealth * 100) + "%"
+		$("#healthBar").css('width', width);
 	}
 
 	animating(){
@@ -106,8 +111,13 @@ class UI{
 		let caption = ' no one';
 		if (game.config.mob != null){
 			let mob = game.config.mob;
-			caption = " lvl " + mob.level + " " + mob.name + " a: " 
-				+ mob.attack + " hp: "+ mob.health
+			let width = (mob.health / mob.max * 100).toFixed(0) + "%";			
+			let bar = "<div class='progress'><div id='healthBar' " 
+				+ "class='progress-bar bg-danger' role='progressbar' "
+				+ "style='width: " + width + "'></div></div>";
+			caption = "<div> lvl " + mob.level + " " + mob.name + " a: " 
+				+ mob.attack + " hp: "+ mob.health + "/" + mob.max
+				+ "</div><div>" + bar + "</div>";
 		}
 		$("#fighting").html(caption);
 	}

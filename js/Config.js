@@ -12,11 +12,12 @@ class Config {
     maxHealth = 10;
     mob = null;
     mobs = {
-        rat: {attack: 1, health: 2, level: 1}
+        rat: {attack: 1, health: 2, max: 2, level: 1}
     }
     modifiers = {
         attack: 0,
-        health: 0,        
+        health: 0,
+        max: 0,        
         level: 0,
     }
     numOfReels = 3;
@@ -28,7 +29,7 @@ class Config {
     positions = [];
     reelSymbols = ['heal', 'weapon', 'maxArmor', 'maxHealth', 'portal'];
     reels = [];
-    spawnRate = 5;
+    spawnRate = 3;
     steps = 0;    
     weapon = 1;
     wins = [

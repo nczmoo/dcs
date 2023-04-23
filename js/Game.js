@@ -1,6 +1,6 @@
 class Game{
 	config = new Config();	
-	loopInterval = setInterval(this.looping, 500);
+	loopInterval = setInterval(this.looping, 1000);
 	constructor(){
 		
 	}
@@ -36,7 +36,9 @@ class Game{
 	}
 
 	die(){
-		ui.status("You died " + this.config.steps + " steps in, lost all your gold, and someone brought you back to the entrance.");
+		ui.status("You died " + this.config.steps 
+			+ " steps in, lost all your gold (" + this.config.gold 
+			+ "), and someone brought you back to the entrance.");
 		this.config.resetGold();
 		this.exit();
 	}
@@ -51,8 +53,9 @@ class Game{
 			this.config.modifiers.attack--;			
 			return;
 		}
-		if (this.config.modifiers.health > 0){
+		if (this.config.modifiers.health > 1){
 			this.config.modifiers.health--;
+			this.config.modifiers.max--;
 		}
 	}
 
@@ -164,18 +167,33 @@ class Game{
 	}
 
 	mobHits(){
-		let dmg = randNum (0, this.config.mob.attack) - this.config.armor;
+		let dmg = randNum (0, this.config.mob.attack);
+		let initDmg = dmg;
 		if (dmg < 0){
 			dmg = 0;
 		}
-		
+		let armorDmg = null;
+		if (this.config.armor > 0){
+			this.config.armor -= dmg;
+			armorDmg = dmg;
+			armorCaption += dmg + " damage.";
+		}
+		if (this.config.armor < 0){
+			armorDmg = (dmg + this.config.armor);
+			
+			dmg = Math.abs(this.config.armor);
+			this.config.armor = 0;
+		}
 		this.config.health -= dmg;
+		let armorCaption = "Your armor was hit for " + armorDmg 
+			+ " damage. (<span class='text-danger'>-" + armorDmg + "</span>)";
+		let healthCaption = "Your health was hit for " + dmg 
+			+ " damage. (<span class='text-danger'>-" + dmg +  "</span>)";
 		let status = this.config.mob.name + " missed!";
 		if (dmg > 0){
 			status = "The " + this.config.mob.name 
-			+ " hit you for " + dmg 
-			+ " damage and you're now at " + this.config.health 
-			+ " (<span class='text-danger'>-" + dmg + "</span>)";
+			+ " hit you for " + initDmg 
+			+ " damage.";
 		}
 		ui.status(status);
 		if (this.config.health < 1){
@@ -189,8 +207,7 @@ class Game{
 		let status = "<span class='fw-bold'>You</span> missed";
 		if (dmg > 0){
 			status = "<span class='fw-bold'>You</span> hit the " 
-			+ this.config.mob.name + " for " + dmg + " damage! It's now at " 
-			+ this.config.mob.health + " hp."
+			+ this.config.mob.name + " for " + dmg + " damage!"
 		}
 		ui.status(status)
 		if (this.config.mob.health < 1){
@@ -209,6 +226,9 @@ class Game{
 			pay = this.config.lines;
 		}
 		if (what == 'heal' || what == 'portal'){
+			if (ui.potionsHidden){
+				ui.potionsHidden = false;
+			}
 			this.config.potions[what] += pay;
 			return;
 		}		
@@ -263,6 +283,7 @@ class Game{
 			return;
 		}
 		this.config.modifiers.health++;
+		this.config.modifiers.max++;
 	}
 
 

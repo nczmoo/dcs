@@ -22,18 +22,30 @@
 	</style>
 </head>
 <body>
+	<div class="text-center">
+		Gold: <span id="gold"></span>
+	</div>
+	<div class="">
+		<div>
+		Health: <span id='health'></span>/<span id='maxHealth'></span>
+		</div><div>
+			<div class="progress">
+				<div id='healthBar' class="progress-bar bg-danger" role="progressbar" 
+					style="width: 100%"></div>
+			  </div>
+		</div>
+	</div>
 	<div class="row">
-		<div class="col text-center">
-			Health: <span id='health'></span>/<span id='maxHealth'></span>
+		<div class="col text-center">			
 		</div><div class="col text-center">
-			Armor: <span id="armor"></span>
+			Armor: <span id="armor"></span>/<span id="maxArmor"></span>
 		</div><div class="col text-center">
 			Weapon: <span id="weapon"></span>
 		</div><div class="col text-center">
-			Gold: <span id="gold"></span>
+			
 		</div>
 	</div>
-	<div id="potions" class="row">
+	<div id="potions" class="row d-none">
 		<div class="col text-center">
 			Healing Potion: <span id="heal"></span>
 			<button id="drink-heal" class="drink verb1 btn btn-link">[ drink ]</button>
@@ -44,23 +56,22 @@
 	</div>
 	<div id="menu" class="row mb-3 mt-3">
 		<div class="col text-center">
-			<button id='menu-dungeon' class="menu btn btn-link">dungeon</button> 
+			<button id='menu-dungeon' class="menu btn btn-link" disabled>dungeon</button> 
 		</div><div class="col text-center">
-			<button id='menu-store' class="menu btn btn-link" disabled>store</button> 
+			<button id='menu-store' class="menu btn btn-link">store</button> 
 		</div>
 	</div>
-	<div id="dungeon" class="window d-none">
-		
+	<div id="dungeon" class="window">		
 		<div class="text-center">
 			<button id='crawl' class="btn btn-success form-control">enter</button>
-		</div><div class="row">
-			<div class="col text-center">
-				Steps: <span id="steps"></span>
-			</div><div class="col text-center">
-				Fighting: <span id="fighting"></span>
-			</div>
-		</div><div id="log" class="text-center"></div>
-	</div><div id="store" class="window">
+		</div><div class="col text-center">
+			Steps: <span id="steps"></span>
+		</div><div class="col text-center">
+			Fighting: <span id="fighting"></span>
+
+		</div><div id="log" class="text-center mt-5"></div>
+
+	</div><div id="store" class="window d-none">
 		<div class="row">
 			<div id='reel-0' class='col text-center'>
 
