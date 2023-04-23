@@ -2,14 +2,22 @@ class UI{
 	logs = [];
 	animatingInterval = setInterval(this.animating, 1000);
 	potionsHidden = true;
+	window = 'dungeon';
 	wins = null;
 	winPointer = null;	
 	constructor(){
 		this.printReels();
+		$(".window").addClass('d-none');
+		$("#" + this.window).removeClass('d-none');
 	}
 	refresh(){
 		if (!this.potionsHidden){
 			$("#potions").removeClass('d-none');
+		}
+		$(".menu").prop('disabled', true);
+		if (!game.config.crawling){
+			$(".menu").prop('disabled', false);
+			$("#menu-" + this.window).prop('disabled', true);
 		}
 		let fills = ['armor', 'credits', 'gold', 'health', 'lines', 'maxArmor', 'maxHealth', 'steps', 'weapon'];
 		for (let fill of fills){			

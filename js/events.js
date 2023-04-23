@@ -16,6 +16,7 @@ $(document).on('click', '#crawl', function(e){
 });
 
 $(document).on('click', '.menu', function(e){
+	ui.window = e.target.id.split('-')[1];
 	$(".window").addClass('d-none');
 	$("#" + e.target.id.split('-')[1]).removeClass('d-none');
 	$(".menu").prop('disabled', false);

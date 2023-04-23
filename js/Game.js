@@ -74,6 +74,7 @@ class Game{
 		this.config.forward = true;
 		this.config.steps = 0;
 		this.config.resetHealth();
+		this.config.resetArmor();
 		this.config.mob = null;
 		for (let i in this.config.modifiers){
 			this.config.modifiers[i] = 0;

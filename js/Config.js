@@ -29,7 +29,7 @@ class Config {
     positions = [];
     reelSymbols = ['heal', 'weapon', 'maxArmor', 'maxHealth', 'portal'];
     reels = [];
-    spawnRate = 3;
+    spawnRate = 4;
     steps = 0;    
     weapon = 1;
     wins = [
