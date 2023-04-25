@@ -2,6 +2,7 @@ class UI{
 	logs = [];
 	animatingInterval = setInterval(this.animating, 1000);
 	potionsHidden = true;
+	menuHidden = true;
 	window = 'dungeon';
 	wins = null;
 	winPointer = null;	
@@ -24,8 +25,7 @@ class UI{
 			$("#" + fill).html(game.config[fill]);
 		}
 		for (let i in game.config.potions){
-			let potion = game.config.potions[i];
-			
+			let potion = game.config.potions[i];			
 			$("#" + i).html(potion);
 			$("#drink-" + i).prop('disabled', potion < 1);		
 		}
@@ -91,7 +91,7 @@ class UI{
 		let txt = '';
 		for (let i in this.logs){
 			let log = this.logs[i];
-			txt += "<div>" + log + "</div>";
+			txt += log;
 		}
 		$("#log").html(txt);
 	}
@@ -134,8 +134,11 @@ class UI{
 		$("#fighting").html(caption);
 	}
 
-	status(msg){
-		this.logs.unshift(msg);
-
+	status(msg, type){
+		let txtClass = ' player ';
+		if (type != undefined){
+			txtClass = " " + type + " ";
+		}
+		this.logs.unshift("<div class='" + txtClass + "'>" + msg + "</div>");		
 	}
 }

@@ -8,7 +8,7 @@ class Config {
     gold = 0;
     goldInRun = 0;
 	health = 10;   
-    lastDive = 20;
+    lastDive = 10;
     lines = 1; 
     maxLines = 5;
     maxHealth = 10;
@@ -46,7 +46,7 @@ class Config {
     yourTurn = true;
 
     constructor(){       
-        this.maxSteps = randNum(this.spawnRate, this.spawnRate * 2); ; 
+        this.resetMaxSteps();
         while (this.reels.length < this.numOfReels){
             this.reels.push(this.reelSymbols);
             this.positions.push(randNum(0, this.reelSymbols.length -1));
@@ -76,15 +76,18 @@ class Config {
             if (reel.length == 0 || reel[reel.length - 1] != rand){                
                 reel.push(rand);
             }
-        }
-        
+        }        
         return reel;
     }
 
-    getGold(delta){
+    getGold(delta){        
         this.gold += delta;
         this.goldInRun += delta;
         this.checkLines();
+        if (this.gold > 0 && ui.menuHidden){
+            $("#menu").removeClass('d-none');
+            ui.menuHidden = false;
+        }
     }
 
     resetArmor(){
@@ -98,5 +101,9 @@ class Config {
 
     resetHealth(){
         this.health = this.maxHealth;
+    }
+
+    resetMaxSteps(){
+        this.maxSteps = randNum(this.spawnRate, this.spawnRate * 2); 
     }
 }

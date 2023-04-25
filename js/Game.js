@@ -11,13 +11,12 @@ class Game{
 		}
 		if (this.config.steps > this.config.lastDive){
 			this.config.lastDive = this.config.steps;
-
 		}
 		this.config.steps--;
 		if (this.config.steps < 1){
 			this.exit();
-		}
-		
+			return true;
+		}		
 	}
 
 	crawl(){
@@ -29,12 +28,13 @@ class Game{
 			this.config.steps ++;
 			this.config.stepsForward ++;
 		}  
-		this.back();
+		if (this.back()){
+			return;
+		}
 		let modifier = 1;
 		if (!this.config.forward){
 			modifier = 2;
 		}
-		console.log(this.config.stepsForward, this.config.maxSteps)
 		let spawn = randNum(1, this.config.spawnRate * modifier) == 1 
 			|| (this.config.forward && this.config.stepsForward >= this.config.maxSteps);
 		if (spawn){
@@ -46,9 +46,10 @@ class Game{
 	}
 
 	die(){
-		ui.status("You died " + this.config.steps 
-			+ " steps in, lost all your gold (" + this.config.gold 
-			+ "), and someone brought you back to the entrance.");
+		ui.status("You <span class='fw-bold text-danger'>died</span> " 
+			+ this.config.steps 
+			+ " steps from the entrance, lost all your gold (" + this.config.gold 
+			+ "), but, somehow, you were ressurected back at the entrance.");
 		this.config.resetGold();
 		this.exit();
 	}
@@ -83,8 +84,9 @@ class Game{
 		this.config.crawling = false;
 		this.config.forward = true;
 		this.config.steps = 0;
-		this.config.resetHealth();
 		this.config.resetArmor();
+		this.config.resetHealth();
+		this.config.resetMaxSteps();
 		this.config.mob = null;
 		for (let i in this.config.modifiers){
 			this.config.modifiers[i] = 0;
@@ -143,7 +145,6 @@ class Game{
 	}
 
 	lines(delta){
-		console.log('lines', delta);
 		if ((delta == 'more' && (this.config.gold == 0 || this.config.lines == this.config.gold)) 
 		|| (delta == 'less' && this.config.lines == 1)){
 			return;
@@ -170,10 +171,10 @@ class Game{
 				loot = 2;
 			}
 		}
-		ui.status("The lvl " + this.config.mob.level + " " 
-			+ this.config.mob.name + " died and you looted " + loot 
+		ui.status("The <span class='fw-bold'>lvl " + this.config.mob.level + " " 
+			+ this.config.mob.name + " died</span> and you looted " + loot 
 			+ " gold from it. (<span class='text-success='>+" + loot 
-			+ " 	gold</span>)");		
+			+ " 	gold</span>) ", 'mob');		
 		this.config.getGold(loot);
 		this.config.mob = null;		
 		if (this.config.forward){			
@@ -190,31 +191,36 @@ class Game{
 			dmg = 0;
 		}
 
-		let armorDmg = null;
+		let armorDmg = 0;
 		if (this.config.armor > 0){
 			this.config.armor -= dmg;
 			armorDmg = dmg;		
-		}
+		} 
 		if (this.config.armor < 0){
 			armorDmg = (dmg + this.config.armor);
-			
-			dmg = Math.abs(this.config.armor);
+			dmg = Math.abs(this.config.armor);				
 			this.config.armor = 0;
-		} else {
-			dmg = 0;
 		} 
+		dmg -= armorDmg;
+		
 		this.config.health -= dmg;
-		let armorCaption = "Your armor was hit for " + armorDmg 
+		let armorCaption = " Your armor was hit for " + armorDmg 
 			+ " damage. (<span class='text-danger'>-" + armorDmg + "</span>)";
-		let healthCaption = "Your health was hit for " + dmg 
+		let healthCaption = " Your health was hit for " + dmg 
 			+ " damage. (<span class='text-danger'>-" + dmg +  "</span>)";
 		let status = this.config.mob.name + " missed!";
-		if (dmg > 0){
+		if (initDmg > 0){
 			status = "The " + this.config.mob.name 
 			+ " hit you for " + initDmg 
-			+ " damage.";
+			+ " damage." ;
 		}
-		ui.status(status);
+		if (armorDmg > 0){
+			status += armorCaption;
+		}
+		if (dmg > 0){
+			status += healthCaption;
+		}
+		ui.status(status, 'mob');
 		if (this.config.health < 1){
 			this.die();
 		}
@@ -228,7 +234,7 @@ class Game{
 			status = "<span class='fw-bold'>You</span> hit the " 
 			+ this.config.mob.name + " for " + dmg + " damage!"
 		}
-		ui.status(status)
+		ui.status(status);
 		if (this.config.mob.health < 1){
 			this.mobDies();
 		}
@@ -290,7 +296,10 @@ class Game{
 			this.config.mob[i] += modifier;
 		}
 		this.config.mob.name = name;
-		ui.status("<span class='fw-bold'>A lvl " + this.config.mob.level + " " + this.config.mob.name + " spawned</span> in front of you.")
+		ui.status("<span class='fw-bold'>A lvl " 
+			+ this.config.mob.level + " " + this.config.mob.name 
+			+ "(a:" + this.config.mob.attack + " / hp: " + this.config.mob.max 
+			+ ") spawned</span> in front of you.", 'mob')
 	}
 
 	upgradeMob(){
