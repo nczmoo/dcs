@@ -21,7 +21,7 @@ class Config {
         level: 0,
     }
     numOfReels = 3;
-    numOfSymbolsOnReel = 10;
+    numOfSymbolsOnReel = 5;
     potions = {
         heal: 0,
         portal: 0,
@@ -43,8 +43,8 @@ class Config {
 
     constructor(){        
         while (this.reels.length < this.numOfReels){
-            this.reels.push(this.generateReel());
-            this.positions.push(0);
+            this.reels.push(this.reelSymbols);
+            this.positions.push(randNum(0, this.reelSymbols.length -1));
         }
     }
 

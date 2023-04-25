@@ -173,18 +173,20 @@ class Game{
 		if (dmg < 0){
 			dmg = 0;
 		}
+
 		let armorDmg = null;
 		if (this.config.armor > 0){
 			this.config.armor -= dmg;
-			armorDmg = dmg;
-			armorCaption += dmg + " damage.";
+			armorDmg = dmg;		
 		}
 		if (this.config.armor < 0){
 			armorDmg = (dmg + this.config.armor);
 			
 			dmg = Math.abs(this.config.armor);
 			this.config.armor = 0;
-		}
+		} else {
+			dmg = 0;
+		} 
 		this.config.health -= dmg;
 		let armorCaption = "Your armor was hit for " + armorDmg 
 			+ " damage. (<span class='text-danger'>-" + armorDmg + "</span>)";
@@ -249,7 +251,7 @@ class Game{
 		for (let i in this.config.positions){
 			let rand = null;
 			while (1){
-				rand = randNum(0, this.config.numOfSymbolsOnReel - 1);
+				rand = randNum(0, this.config.reels[i].length - 1);
 				if (rand != this.config.positions[i], rand){
 					break;
 				}
