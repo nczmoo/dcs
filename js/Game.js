@@ -9,6 +9,10 @@ class Game{
 		if (this.config.forward){
 			return;
 		}
+		if (this.config.steps > this.config.lastDive){
+			this.config.lastDive = this.config.steps;
+
+		}
 		this.config.steps--;
 		if (this.config.steps < 1){
 			this.exit();
@@ -22,14 +26,20 @@ class Game{
 			return;
 		}
 		if (this.config.forward){
-			this.config.steps++;
+			this.config.steps ++;
+			this.config.stepsForward ++;
 		}  
 		this.back();
 		let modifier = 1;
 		if (!this.config.forward){
 			modifier = 2;
 		}
-		if (randNum(1, this.config.spawnRate * modifier) == 1){
+		console.log(this.config.stepsForward, this.config.maxSteps)
+		let spawn = randNum(1, this.config.spawnRate * modifier) == 1 
+			|| (this.config.forward && this.config.stepsForward >= this.config.maxSteps);
+		if (spawn){
+			this.config.maxSteps++;
+			this.config.stepsForward = 0;
 			this.spawn();			
 		}
 
@@ -154,6 +164,12 @@ class Game{
 
 	mobDies(){
 		let loot = randNum(0, this.config.mob.level);
+		if (this.config.steps > this.config.lastDive ){
+			loot *= 2;
+			if (loot < 1){
+				loot = 2;
+			}
+		}
 		ui.status("The lvl " + this.config.mob.level + " " 
 			+ this.config.mob.name + " died and you looted " + loot 
 			+ " gold from it. (<span class='text-success='>+" + loot 

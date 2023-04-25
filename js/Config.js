@@ -1,5 +1,6 @@
 class Config {
     armor = 0;
+    
     maxArmor = 0;
     crawling = false;
     credits = 0;
@@ -7,9 +8,11 @@ class Config {
     gold = 0;
     goldInRun = 0;
 	health = 10;   
+    lastDive = 20;
     lines = 1; 
     maxLines = 5;
     maxHealth = 10;
+    maxSteps = null;
     mob = null;
     mobs = {
         rat: {attack: 1, health: 2, max: 2, level: 1}
@@ -30,7 +33,8 @@ class Config {
     reelSymbols = ['heal', 'weapon', 'maxArmor', 'maxHealth', 'portal'];
     reels = [];
     spawnRate = 4;
-    steps = 0;    
+    steps = 0;  
+    stepsForward = 0;  
     weapon = 1;
     wins = [
         ['pos',	'pos',	'pos'],
@@ -41,7 +45,8 @@ class Config {
     ];
     yourTurn = true;
 
-    constructor(){        
+    constructor(){       
+        this.maxSteps = randNum(this.spawnRate, this.spawnRate * 2); ; 
         while (this.reels.length < this.numOfReels){
             this.reels.push(this.reelSymbols);
             this.positions.push(randNum(0, this.reelSymbols.length -1));

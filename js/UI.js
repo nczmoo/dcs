@@ -19,7 +19,7 @@ class UI{
 			$(".menu").prop('disabled', false);
 			$("#menu-" + this.window).prop('disabled', true);
 		}
-		let fills = ['armor', 'credits', 'gold', 'health', 'lines', 'maxArmor', 'maxHealth', 'steps', 'weapon'];
+		let fills = ['armor', 'credits', 'gold', 'health', 'lastDive', 'lines', 'maxArmor', 'maxHealth', 'steps', 'weapon'];
 		for (let fill of fills){			
 			$("#" + fill).html(game.config[fill]);
 		}
@@ -29,16 +29,20 @@ class UI{
 			$("#" + i).html(potion);
 			$("#drink-" + i).prop('disabled', potion < 1);		
 		}
+		$("#crawl").removeClass('btn-success');
+		$("#crawl").removeClass('btn-danger');
+		$("#crawl").removeClass('btn-warning');
 		if (!game.config.crawling){
 			$("#crawl").html('enter');
-			$("#crawl").addClass('btn-success');
-			$("#crawl").removeClass('btn-danger');
+			$("#crawl").addClass('btn-success');			
 		} else if (game.config.crawling && game.config.forward){
 			$("#crawl").html('exit');
 			$("#crawl").addClass('btn-danger');
-			$("#crawl").removeClass('btn-success');
 		} else if (game.config.crawling && !game.config.forward){
 			$("#crawl").html('exiting');
+			$("#crawl").addClass('btn-warning');
+			
+
 		}
 		$("#pull").prop('disabled', false);
 		if (game.config.gold < 1 || this.wins != null){
